@@ -505,7 +505,10 @@ function lessonLook(i){
     <div class="sticky" id="mw"></div>
     <section class="card info" id="info"><p class="muted">Ťukni na celok na mape alebo na názov v zozname. Čísla sú ako v zošite.</p></section>
     <div class="list" id="list"></div>
-    <button class="btn" id="next">Viem ich – ďalej: nájdi na mape</button>`;
+    <div class="stack">
+      <button class="btn" id="next">Viem ich – ďalej: nájdi na mape</button>
+      <button class="btn soft" id="skip">Preskočiť hľadanie – rovno písať názvy</button>
+    </div>`;
   $("#bk").onclick = () => history.back();
   const info = $("#info"), list = $("#list");
   const m = lessonMap(i, u => { if (u) sel(u); });
@@ -533,6 +536,7 @@ function lessonLook(i){
     if (fromList) window.scrollTo({ top: 0, behavior: "smooth" });
   }
   $("#next").onclick = () => go(() => lessonFind(i));
+  $("#skip").onclick = () => go(() => lessonWrite(i));
 }
 
 /* ================= lekcia: 2. najdi na mape ================= */
@@ -541,9 +545,10 @@ function lessonFind(i){
   const l = DATA.lessons[i];
   app.innerHTML = `
     <header class="top"><button class="back" id="bk">‹ Domov</button><div class="sp"></div>${stepsBar(2)}</header>
-    <section class="card"><span class="label" id="cnt"></span><div class="q" id="q"></div><div class="fb" id="fb"></div><button class="btn" id="nx" hidden>Ďalej</button></section>
+    <section class="card"><div class="row" style="align-items:center"><span class="label" id="cnt"></span><span style="flex:0 0 auto"><button type="button" class="linkbtn" id="sk">Preskočiť krok →</button></span></div><div class="q" id="q"></div><div class="fb" id="fb"></div><button class="btn" id="nx" hidden>Ďalej</button></section>
     <div id="mw"></div>`;
   $("#bk").onclick = () => history.back();
+  $("#sk").onclick = () => go(() => lessonWrite(i));
   const fb = $("#fb"), nx = $("#nx");
   let q = shuffle(l.u), idx = 0, cur = null, locked = false;
   const missed = new Set();
